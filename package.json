@@ -1,6 +1,6 @@
 {
   "name": "ffmpeg-remix",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "ffmpeg slice/concat",
   "main": "dist/index.js",
   "files": [
@@ -32,7 +32,9 @@
     "url": "git+https://github.com/Laurian/ffmpeg-remix.git"
   },
   "keywords": [
-    "remix", "ffmpeg", "video"
+    "remix",
+    "ffmpeg",
+    "video"
   ],
   "author": "Laurian Gridinoc <laurian@gridinoc.name>",
   "license": "MIT",
