@@ -6,36 +6,36 @@
 [![Dependency Status][depstat-image]][depstat-url]
 [![Downloads][download-badge]][npm-url]
 
-Packaging of ffmpeg split/concat used for Al Jazeera's PalestineRemix.com project.
+Packaging of ffmpeg split/concat used for Al Jazeera's [PalestineRemix](http://PalestineRemix.com) project.
 
 ## Install
 
 ```sh
-npm i -D ffmpeg-remix
+npm i ffmpeg-remix
 ```
 
 ## Usage
 
 ```js
-import ffmpegRemix from 'ffmpeg-remix';
+import remix from 'ffmpeg-remix';
 
-ffmpegRemix({
+remix({
   output: 'a.mp4',
   input: [
     {
-      source: 'foo.mp4',
+      source: 'foo/bar.mp4',
       start:  23.4, // default 0
-      end:    47.2
+      end:    47.2  // default EOF
     },
     {
-      source:   'http://foo.org/bar.mp4',
-      start:    23.4,  // default 0
-      duration: 7.2 // end has precedence
+      source:   'http://baz.org/foo.mp4',
+      start:    23.4, // default 0
+      duration: 7.2   // end has precedence
     }
   ],
   limit: 5 // max ffmpeg parallel processes, default null (unlimited)
 }, function(err, result) {
-
+  // …
 });
 ```
 
