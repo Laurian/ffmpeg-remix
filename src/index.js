@@ -2,8 +2,10 @@ import async from 'async';
 import ffmpeg from 'fluent-ffmpeg';
 import tmp from 'tmp';
 import path from 'path';
+import debug from 'debug';
 
 
+const d = debug('ffmpeg-remix');
 tmp.setGracefulCleanup();
 
 
@@ -11,17 +13,18 @@ const ingest = (data, tmpDir) => {
   return (input, callback) => {
     const ff = ffmpeg(input.source);
 
-    if (input.start) ff.seekInput(input.start);
-    if (input.end) {
-      ff.duration(input.end - input.start);
-    } else if (input.duration) {
-      ff.duration(input.duration);
+    if (input.start) {
+      ff.seekInput(input.start);
+    } else {
+      input.start = 0;
     }
 
-    // input.path = path.join(tmpDir.name, `i-${index}.ts`);
+    if (input.end) input.duration = input.end - input.start;
+    if (input.duration) ff.duration(input.duration);
+
     input.path = tmp.fileSync({
-      dir: tmpDir.name,
-      prefix: 'ingest-',
+      dir:     tmpDir.name,
+      prefix:  'ingest-',
       postfix: '.ts'
     }).name;
 
@@ -29,16 +32,16 @@ const ingest = (data, tmpDir) => {
     ff.output(input.path);
 
     ff.on('start', (commandLine) => {
-      console.log('Spawned Ffmpeg with command: ' + commandLine);
+      d(`Spawned: ${commandLine}`);
     });
 
     ff.on('error', (err, stdout, stderr) => {
-      console.log('Cannot process video: ' + err.message);
+      d(err);
       callback(err, null);
     });
 
     ff.on('end', () => {
-      console.log('Transcoding succeeded !' + input.path);
+      d(`Created: ${input.path}`);
       callback(null, input);
     });
 
@@ -49,31 +52,29 @@ const ingest = (data, tmpDir) => {
 
 const concat = (data, tmpDir, callback) => {
   return (err, ingest) => {
-    console.log(ingest);
-
     const ff = ffmpeg();
+
     const input = [];
     for (const segment of ingest) {
       input.push(segment.path);
     }
 
-    console.log(input);
-
     ff.input(`concat:${input.join('|')}`);
     ff.output(data.output);
 
     ff.on('start', (commandLine) => {
-      console.log('Spawned Ffmpeg with command: ' + commandLine);
+      d(`Spawned: ${commandLine}`);
     });
 
     ff.on('error', (err, stdout, stderr) => {
-      console.log('Cannot process video: ' + err.message);
+      d(err);
+      tmpDir.removeCallback();
       callback(err);
     });
 
     ff.on('end', () => {
-      console.log('Transcoding succeeded !');
-
+      d(`Created: ${data.output}`);
+      tmpDir.removeCallback();
       callback(null, data);
     });
 
