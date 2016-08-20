@@ -46,6 +46,7 @@
     "babel-cli": "^6.11.4",
     "babel-core": "^6.13.2",
     "babel-eslint": "^4.1.6",
+    "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-es2015": "^6.13.2",
     "coveralls": "^2.11.4",
     "dependency-check": "^2.5.1",

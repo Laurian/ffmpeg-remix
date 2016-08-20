@@ -1,8 +1,8 @@
-import ffmpegRemix from '../src';
-// import ffmpegRemix from 'ffmpeg-remix';
-import path from 'path';
+var remix = require('../dist');
+// var remix = require('ffmpeg-remix');
+var path = require('path');
 
-ffmpegRemix({
+remix({
   output: path.join(__dirname, 'a.mp4'),
   input: [
     {
