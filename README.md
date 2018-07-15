@@ -33,7 +33,8 @@ remix({
       duration: 7.2   // end has precedence
     }
   ],
-  limit: 5 // max ffmpeg parallel processes, default null (unlimited)
+  limit: 5, // max ffmpeg parallel processes, default null (unlimited)
+  ffmpegPath: require('ffmpeg-static').path // optionally set path to ffmpeg binary
 }, function(err, result) {
   // …
 });

@@ -1,6 +1,7 @@
 var remix = require('../dist');
 // var remix = require('ffmpeg-remix');
 var path = require('path');
+var ffmpegLocalPath = require('ffmpeg-static').path;
 
 remix({
   output: path.join(__dirname, 'a.mp4'),
@@ -21,7 +22,8 @@ remix({
       end:    71.031
     }
   ],
-  limit: 2 // max ffmpeg parallel processes, default null (unlimited)
+  limit: 2, // max ffmpeg parallel processes, default null (unlimited)
+  ffmpegPath:  ffmpegLocalPath // optional path to a local ffmpeg binary 
 }, function(err, result) {
   console.log(err, result);
 });
