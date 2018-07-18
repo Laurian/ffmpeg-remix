@@ -1,7 +1,6 @@
 import async from 'async';
 import ffmpeg from 'fluent-ffmpeg';
 import tmp from 'tmp';
-import path from 'path';
 import debug from 'debug';
 
 
@@ -10,6 +9,9 @@ tmp.setGracefulCleanup();
 
 
 const ingest = (data, tmpDir) => {
+  if(data.ffmpegPath){
+    ffmpeg.setFfmpegPath(data.ffmpegPath);
+  }
   return (input, callback) => {
     const ff = ffmpeg(input.source);
 
@@ -51,6 +53,9 @@ const ingest = (data, tmpDir) => {
 
 
 const concat = (data, tmpDir, callback) => {
+  if(data.ffmpegPath){
+    ffmpeg.setFfmpegPath(data.ffmpegPath);
+  }
   return (err, ingest) => {
     const ff = ffmpeg();
 
